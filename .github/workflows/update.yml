@@ -1,0 +1,32 @@
+#.github/workflows/update.yml
+
+name: Update TNG Notice
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'   # 每 5 分钟运行一次
+  workflow_dispatch:        # 可手动运行
+  push:                     # 手动 push 时也运行
+
+jobs:
+  update-notice:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ✅ 检出代码
+        uses: actions/checkout@v4
+
+      - name: 🐍 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: 🔧 运行 bot.py 写入通知
+        run: python bot.py
+
+      - name: 🚀 提交并推送更新
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tng_notice.txt
+          git commit -m "🔄 自动更新通知 at $(date +'%Y-%m-%d %H:%M:%S')" || echo "Nothing to commit"
+          git push
