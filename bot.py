@@ -14,4 +14,7 @@ with open("tng_notice.txt", "w", encoding="utf-8") as f:
 print("✅ 收款信息已生成：", message)
 
 # 🔊 播报语音（使用中文 + 媒体音量）
-os.system(f'termux-tts-speak -s music -l zh-CN "{message}"')
+def speak(text):
+    os.system(f'termux-tts-speak -s music -l zh-CN "{text}"')
+
+speak(message)
